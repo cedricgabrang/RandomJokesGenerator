@@ -1,4 +1,5 @@
-﻿using MonkeyCacheDemo.Views;
+﻿using MonkeyCache.SQLite;
+using MonkeyCacheDemo.Views;
 using System;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
@@ -10,7 +11,7 @@ namespace MonkeyCacheDemo
         public App()
         {
             InitializeComponent();
-
+            Barrel.ApplicationId = "random_jokes_cache";
             MainPage = new NavigationPage(new MainPage());
         }
 
