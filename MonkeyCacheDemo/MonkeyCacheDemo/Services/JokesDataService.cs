@@ -15,11 +15,19 @@ namespace MonkeyCacheDemo.Services
 
         public async Task<List<Jokes>> GetRandomJokesAsync()
         {
-            var endpoint = string.Format(Constants.BASE_URL, "ten");
-            HttpResponseMessage httpResponse = await httpClient.GetAsync(endpoint);
-            string httpResult = httpResponse.Content.ReadAsStringAsync().Result;
-            var httpData = JsonConvert.DeserializeObject<List<Jokes>>(httpResult);
-            return httpData;
+            if (Connectivity.NetworkAccess != NetworkAccess.Internet)
+            {
+                return null;
+            }
+
+            else
+            {
+                var endpoint = string.Format(Constants.BASE_URL, "ten");
+                HttpResponseMessage httpResponse = await httpClient.GetAsync(endpoint);
+                string httpResult = httpResponse.Content.ReadAsStringAsync().Result;
+                var httpData = JsonConvert.DeserializeObject<List<Jokes>>(httpResult);
+                return httpData;
+            }
             
         }
     }
