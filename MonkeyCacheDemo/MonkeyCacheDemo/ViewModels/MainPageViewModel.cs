@@ -17,7 +17,7 @@ namespace MonkeyCacheDemo.ViewModels
 
         public event PropertyChangedEventHandler PropertyChanged;
         private readonly JokesDataService _jokesDataService;
-        private List<Jokes> _jokes;
+        private IEnumerable<Jokes> _jokes;
         private bool _isRefreshing;
         private bool _isConnected;
 
@@ -45,7 +45,7 @@ namespace MonkeyCacheDemo.ViewModels
             }
         }
 
-        public List<Jokes> Jokes
+        public IEnumerable<Jokes> Jokes
         {
             get => _jokes;
             set
@@ -75,7 +75,7 @@ namespace MonkeyCacheDemo.ViewModels
             IsConnected = Connectivity.NetworkAccess != NetworkAccess.Internet;
 
             Connectivity.ConnectivityChanged += Connectivity_ConnectivityChanged;
-            
+
             GetData();
         }
 

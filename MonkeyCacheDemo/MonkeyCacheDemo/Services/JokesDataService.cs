@@ -1,4 +1,5 @@
-﻿using MonkeyCacheDemo.Models;
+﻿using MonkeyCache.SQLite;
+using MonkeyCacheDemo.Models;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -15,20 +16,25 @@ namespace MonkeyCacheDemo.Services
 
         public async Task<List<Jokes>> GetRandomJokesAsync()
         {
-            if (Connectivity.NetworkAccess != NetworkAccess.Internet)
-            {
-                return null;
-            }
+            var endpoint = string.Format(Constants.BASE_URL, "ten");
 
-            else
+            if(Connectivity.NetworkAccess == NetworkAccess.Internet) 
             {
-                var endpoint = string.Format(Constants.BASE_URL, "ten");
                 HttpResponseMessage httpResponse = await httpClient.GetAsync(endpoint);
                 string httpResult = httpResponse.Content.ReadAsStringAsync().Result;
                 var httpData = JsonConvert.DeserializeObject<List<Jokes>>(httpResult);
+                Barrel.Current.Empty(endpoint);
+                Barrel.Current.Add(key: endpoint, data: httpData, TimeSpan.FromMinutes(30));
                 return httpData;
             }
-            
+
+            else 
+            {
+                var cache =  Barrel.Current.Get<List<Jokes>>(endpoint);
+                return cache;
+            }
+
+           
         }
     }
 }
